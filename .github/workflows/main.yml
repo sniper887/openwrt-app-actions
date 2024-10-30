@@ -85,15 +85,25 @@ jobs:
 
       - name: Clean Code
         run: |
-          rm -f ${SDK_NAME}/package/linux/modules/*
-          rm -f ${SDK_NAME}/package/kernel/linux/modules/*
-          grep -lFr '$(call KernelPackage,' ${SDK_NAME}/package/linux | xargs -rn1 sed -i 's/ FILES:=/ XFILES:=/g' || true
-          grep -lFr '$(call KernelPackage,' ${SDK_NAME}/package/kernel | xargs -rn1 sed -i 's/ FILES:=/ XFILES:=/g' || true
-          find ${SDK_NAME}/target/linux -name 'modules.mk' | xargs -rn1 sed -i 's/ FILES:=/ XFILES:=/g' || true
+          if [ -d "${SDK_NAME}/package/linux/modules" ]; then
+            rm -f ${SDK_NAME}/package/linux/modules/*
+          fi
+          if [ -d "${SDK_NAME}/package/kernel/linux/modules" ]; then
+            rm -f ${SDK_NAME}/package/kernel/linux/modules/*
+          fi
+          if [ -d "${SDK_NAME}/package/linux" ]; then
+            grep -lFr '$(call KernelPackage,' ${SDK_NAME}/package/linux | xargs -rn1 sed -i 's/ FILES:=/ XFILES:=/g' || true
+          fi
+          if [ -d "${SDK_NAME}/package/kernel" ]; then
+            grep -lFr '$(call KernelPackage,' ${SDK_NAME}/package/kernel | xargs -rn1 sed -i 's/ FILES:=/ XFILES:=/g' || true
+          fi
+          if [ -d "${SDK_NAME}/target/linux" ]; then
+            find ${SDK_NAME}/target/linux -name 'modules.mk' | xargs -rn1 sed -i 's/ FILES:=/ XFILES:=/g' || true
+          fi
           grep 'src-git base ' ${SDK_NAME}/feeds.conf.default > ${SDK_NAME}/feeds.conf
-          grep 'src-git luci ' ${SDK_NAME}/feeds.conf.default >> ${SDK_NAME}/feeds.conf
+          grep 'src-git luci ' ${SDK_NAME}/feeds.conf.default >> ${SDK_NAME}/feeds.con
 
-      - name: Write Config
+      - nam: Write Config
         run: |
           cat <<EOF >${SDK_NAME}/.config
           # CONFIG_SIGNED_PACKAGES is not set
