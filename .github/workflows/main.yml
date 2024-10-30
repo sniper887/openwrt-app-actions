@@ -103,7 +103,7 @@ jobs:
           grep 'src-git base ' ${SDK_NAME}/feeds.conf.default > ${SDK_NAME}/feeds.conf
           grep 'src-git luci ' ${SDK_NAME}/feeds.conf.default >> ${SDK_NAME}/feeds.con
 
-      - nam: Write Config
+      - name: Write Config
         run: |
           cat <<EOF >${SDK_NAME}/.config
           # CONFIG_SIGNED_PACKAGES is not set
